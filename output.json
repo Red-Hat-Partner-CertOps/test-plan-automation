@@ -1,0 +1,404 @@
+[
+  {
+    "name": "ARL CPU U15 i7 non-Vpro,1.7GHZ,12C",
+    "optionType": "Integrated",
+    "isSupplemental": false,
+    "features": [
+      {
+        "name": "CORE",
+        "features": [
+          {
+            "id": 90,
+            "name": "Max Logical CPU",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "FV_CORE",
+        "features": [
+          {
+            "id": 326,
+            "name": "Virtual Machine (Host)",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "FV_MEMORY",
+        "features": [
+          {
+            "id": 326,
+            "name": "Virtual Machine (Host)",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "MEMORY",
+        "features": [
+          {
+            "id": 80,
+            "name": "System Memory",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "CPUSCALING",
+        "features": [
+          {
+            "id": 116,
+            "name": "System Controlled Scaling",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "profiler_hardware_core",
+        "features": [
+          {
+            "id": 2867,
+            "name": "CPU Core Performance  Counters",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "profiler_hardware_uncore",
+        "features": [
+          {
+            "id": 2877,
+            "name": "Uncore Performance Counters",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "FV_CPU_PINNING",
+        "features": [
+          {
+            "id": 2406,
+            "name": "CPU Pinning",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "FV_PCIE_STORAGE_PASSTHROUGH",
+        "features": [
+          {
+            "id": 2576,
+            "name": "PCIE Pass-Through Storage"
+          }
+        ]
+      },
+      {
+        "name": "FV_PCIE_NETWORK_PASSTHROUGH",
+        "features": [
+          {
+            "id": 2586,
+            "name": "PCIE Pass-Through Network"
+          }
+        ]
+      },
+      {
+        "name": "FV_USB_STORAGE_PASSTHROUGH",
+        "features": [
+          {
+            "id": 2596,
+            "name": "USB Pass-Through Storage"
+          }
+        ]
+      },
+      {
+        "name": "FV_USB_NETWORK_PASSTHROUGH",
+        "features": [
+          {
+            "id": 2606,
+            "name": "USB Pass-Through Network"
+          }
+        ]
+      },
+      {
+        "name": "FV_LIVE_MIGRATION",
+        "features": [
+          {
+            "id": 2616,
+            "name": "FV Live Migration"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ARL CPU H45 i9 Vpro,2.7GHZ,16C",
+    "optionType": "Integrated",
+    "isSupplemental": false,
+    "features": [
+      {
+        "name": "CORE",
+        "features": [
+          {
+            "id": 90,
+            "name": "Max Logical CPU",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "FV_CORE",
+        "features": [
+          {
+            "id": 326,
+            "name": "Virtual Machine (Host)",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "FV_MEMORY",
+        "features": [
+          {
+            "id": 326,
+            "name": "Virtual Machine (Host)",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "MEMORY",
+        "features": [
+          {
+            "id": 80,
+            "name": "System Memory",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "CPUSCALING",
+        "features": [
+          {
+            "id": 116,
+            "name": "System Controlled Scaling",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "profiler_hardware_core",
+        "features": [
+          {
+            "id": 2867,
+            "name": "CPU Core Performance  Counters",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "profiler_hardware_uncore",
+        "features": [
+          {
+            "id": 2877,
+            "name": "Uncore Performance Counters",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "FV_CPU_PINNING",
+        "features": [
+          {
+            "id": 2406,
+            "name": "CPU Pinning",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "FV_PCIE_STORAGE_PASSTHROUGH",
+        "features": [
+          {
+            "id": 2576,
+            "name": "PCIE Pass-Through Storage"
+          }
+        ]
+      },
+      {
+        "name": "FV_PCIE_NETWORK_PASSTHROUGH",
+        "features": [
+          {
+            "id": 2586,
+            "name": "PCIE Pass-Through Network"
+          }
+        ]
+      },
+      {
+        "name": "FV_USB_STORAGE_PASSTHROUGH",
+        "features": [
+          {
+            "id": 2596,
+            "name": "USB Pass-Through Storage"
+          }
+        ]
+      },
+      {
+        "name": "FV_USB_NETWORK_PASSTHROUGH",
+        "features": [
+          {
+            "id": 2606,
+            "name": "USB Pass-Through Network"
+          }
+        ]
+      },
+      {
+        "name": "FV_LIVE_MIGRATION",
+        "features": [
+          {
+            "id": 2616,
+            "name": "FV Live Migration"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Integrated PCH in CPU",
+    "optionType": "Integrated",
+    "isSupplemental": false,
+    "features": [
+      {
+        "name": "STORAGE",
+        "features": [
+          {
+            "id": 986,
+            "name": "M.2 NVMe",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "STORAGE",
+        "features": [
+          {
+            "id": 1056,
+            "name": "U.2 NVMe",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "STORAGE",
+        "features": [
+          {
+            "id": 1006,
+            "name": "PCIE NVMe",
+            "isPublishable": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "PCIe_NVMe SSD",
+    "optionType": "Integrated",
+    "isSupplemental": false,
+    "features": [
+      {
+        "name": "STORAGE",
+        "features": [
+          {
+            "id": 986,
+            "name": "M.2 NVMe",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "STORAGE",
+        "features": [
+          {
+            "id": 1056,
+            "name": "U.2 NVMe",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "STORAGE",
+        "features": [
+          {
+            "id": 1006,
+            "name": "PCIE NVMe",
+            "isPublishable": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "SD Card reader",
+    "optionType": "Integrated",
+    "isSupplemental": false,
+    "features": [
+      {
+        "name": "STORAGE",
+        "features": [
+          {
+            "id": 986,
+            "name": "M.2 NVMe",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "STORAGE",
+        "features": [
+          {
+            "id": 1056,
+            "name": "U.2 NVMe",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "STORAGE",
+        "features": [
+          {
+            "id": 1006,
+            "name": "PCIE NVMe",
+            "isPublishable": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Discrete Graphic Cards: RTX A500 Ada Generation",
+    "optionType": "Integrated",
+    "isSupplemental": false,
+    "features": [
+      {
+        "name": "VIDEO",
+        "features": [
+          {
+            "id": 406,
+            "name": "Graphic Console",
+            "isPublishable": true
+          }
+        ]
+      },
+      {
+        "name": "VIDEO_DRM",
+        "features": [
+          {
+            "id": 2836,
+            "name": "Basic GPU Graphics",
+            "isPublishable": true
+          }
+        ]
+      }
+    ]
+  }
+]
