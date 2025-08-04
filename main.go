@@ -1,154 +1,3 @@
-/*package main
-
-import (
-	"encoding/json"
-	"fmt"
-	"os"
-	"strings"
-)
-
-type Feature struct {
-	ID            int       `json:"id,omitempty"`
-	Name          string    `json:"name"`
-	IsPublishable bool      `json:"isPublishable,omitempty"`
-	Features      []Feature `json:"features,omitempty"`
-}
-
-type Component struct {
-	Name           string    `json:"name"`
-	OptionType     string    `json:"optionType"`
-	IsSupplemental bool      `json:"isSupplemental"`
-	Features       []Feature `json:"features"`
-}
-
-func main() {
-	input := []string{
-		"Ethernet Controller: Intel I350T2 1G",
-		"Ethernet Controller: ZTE NS212 10G",
-		"Ethernet Controller: ZTE NS312 20G",
-
-		"Video Card: ASPEED AST2600",
-
-		"Storage Controller: Seagate ST4000NM024B-2TF103 *1 RAID RS241",
-		"Storage Controller :Samsung: SAMSUNG MZ7L3960HCJR-00B7C *1 RAID RS241",
-		"Storage Controller: Micron	Micron_7450_MTFDKCC3T2TFS *1",
-		"Storage Controller: Intel INTEL SSDSC2KG960G8",
-
-		"USB: 4 x USB 3.0",
-	}
-
-	jsonData := []Component{}
-
-	for _, line := range input {
-		parts := strings.SplitN(line, ": ", 2)
-		if len(parts) < 2 {
-			continue
-		}
-		category, value := parts[0], parts[1]
-		if category == "Video Card" {
-			videoComponent := Component{
-				Name:           value,
-				OptionType:     "Integrated",
-				IsSupplemental: false,
-				Features: []Feature{
-					{
-						Name: "VIDEO",
-						Features: []Feature{
-							{ID: 406, Name: "Graphic Console", IsPublishable: true},
-						},
-					},
-					{
-						Name: "VIDEO_DRM",
-						Features: []Feature{
-							{ID: 2836, Name: "Basic GPU Graphics", IsPublishable: true},
-						},
-					},
-				},
-			}
-			jsonData = append(jsonData, videoComponent)
-		} else if category == "Ethernet Controller" {
-			ethernetComponent := Component{
-				Name:           value,
-				OptionType:     "Integrated",
-				IsSupplemental: false,
-				Features: []Feature{
-					{
-						Name: "1GIGETHERNET",
-						Features: []Feature{
-							{ID: 606, Name: "1 Gigabit Ethernet", IsPublishable: true},
-						},
-						{
-							Name: "10GIGETHERNET",
-							Features: []Features{
-								{ ID: 636,Name: "10 Gigabit Ethernet", IsPublishable: true},
-						},
-						{
-								Name: "20GigEthernet",
-								Features: []Features{
-									{ ID: 646,Name: "20 Gigabit Ethernet",isPublishable: true},
-						},
-			},
-		},
-	},
-},
-			jsonData = append(jsonData, ethernetComponent)
-		} else if category == "USB" {
-			usbComponent := Component{
-				Name:           value,
-				OptionType:     "Integrated",
-				IsSupplemental: false,
-				Features: []Feature{
-					{
-						Name: "USB3_5Gbps",
-						Features: []Feature{
-							{ID: 376, Name: "USB C (5 Gigabit) Ports", IsPublishable: true},
-							{ID: 2476, Name: "USB 3 (5 Gigabit) Ports", IsPublishable: true},
-						},
-					},
-				},
-			}
-			jsonData = append(jsonData, usbComponent)
-		} else if category == "Storage Controller" {
-			storageComponent := Component{
-				Name:           value,
-				OptionType:     "Integrated",
-				IsSupplemental: false,
-				Features: []Feature{
-					{
-						Name: "STORAGE",
-						Features: []Feature{
-							{ID: 986, Name: "M.2 NVMe", IsPublishable: true},
-					},
-					{
-						Name: "STORAGE",
-						Features: []Feature{
-							{ID: 1056, Name: "U.2 NVMe", IsPublishable: true},
-					},
-					{   Name: "STORAGE",
-						Features: []Feature{
-							{ID: 1006, Name: "PCIE NVMe", IsPublishable: true},
-					},
-				},
-			},
-		},
-	},
-	jsonData = append(jsonData, storageComponent)
-}
-		result, _ := json.MarshalIndent(jsonData, "", "  ")
-		file, err := os.Create("output.json")
-		if err != nil {
-			fmt.Println("Error creating file:", err)
-			return
-		}
-		defer file.Close()
-
-		_, err = file.Write(result)
-		if err != nil {
-			fmt.Println("Error writing to file:", err)
-			}
-		}
-	}*/
-
 package main
 
 import (
@@ -160,55 +9,66 @@ import (
 
 type Feature struct {
 	ID            int       `json:"id,omitempty"`
-	Name          string    `json:"name"`
+	Name          string    `json:"name,omitempty"`
 	IsPublishable bool      `json:"isPublishable,omitempty"`
 	Features      []Feature `json:"features,omitempty"`
 }
 
 type Component struct {
-	Name           string    `json:"name"`
-	OptionType     string    `json:"optionType"`
-	IsSupplemental bool      `json:"isSupplemental"`
+	Name           string    `json:"name,omitempty"`
+	OptionType     string    `json:"optionType,omitempty"`
+	IsSupplemental bool      `json:"isSupplemental,omitempty"`
 	Type           string    `json:"type,omitempty"`
-	Features       []Feature `json:"features"`
+	Features       []Feature `json:"features,omitempty"`
+}
+
+func classifyDevice(deviceName string) string {
+	lower := strings.ToLower(deviceName)
+	if strings.Contains(lower, "processor") {
+		return "Processor"
+	} else if strings.Contains(lower, "ethernet adapter") ||
+		strings.Contains(lower, "network adapter") ||
+		strings.Contains(lower, "connectx-6") ||
+		strings.Contains(lower, "connectx-7") ||
+		strings.Contains(lower, "gbe") ||
+		strings.Contains(lower, "nic") || // <-- add this
+		strings.Contains(lower, "gb") || // <-- add this
+		strings.Contains(lower, "10gbase-t") {
+		return "Ethernet"
+	} else if strings.Contains(lower, "storage") || strings.Contains(lower, "raid") ||
+		strings.Contains(lower, "sas/sata") || strings.Contains(lower, "fibre channel adapter") ||
+		strings.Contains(lower, "pcie") || strings.Contains(lower, "hba") ||
+		strings.Contains(lower, "32gb") || strings.Contains(lower, "16gb") {
+		return "Storage"
+	} else if strings.Contains(lower, "dvd") || strings.Contains(lower, "optical disk drive") {
+		return "dvd"
+	}
+	return "Unknown"
 }
 
 func main() {
-	input := []string{
-		"Processor: ARL CPU U15 i7 non-Vpro,1.7GHZ,12C",
-		"Processor: ARL CPU H45 i9 Vpro,2.7GHZ,16C",
-		"Storage: Integrated PCH in CPU",
-		"Storage: PCIe_NVMe SSD",
-		"TB :2x TBT4 Type C",
-		"USB: 1x USB Type C MF 10 Gbps",
-		"USB: 1x USB Type-A 3.2 G1 5Gbps",
-
-		"Ethernet: Intel I219LM 1Gig",
-		"Audio: HP Audio, dual stereo speakers, dual array digital microphones, functions keys for volume up and down, combo microphone/headphone jack",
-		"HDMI: Audio HDMI",
-		"Storage: SD Card reader",
-
-		"Fingerprint: Fingerprint Reader",
-
-		"Wirless: Intel AX211 Wi-Fi 6E +BT 5.3 M.2 and Intel BE201 Wi-Fi 7 +BT 5.4 M.2",
-
-		"Video: Discrete Graphic Cards: RTX A500 Ada Generation",
-		"Display: eDP: 300 TOP, 400nits and 500nits",
+	data, err := os.ReadFile("input.txt")
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+		return
 	}
 
-	jsonData := []Component{}
+	deviceNames := strings.Split(string(data), "\n")
+	var components []Component
 
-	for _, line := range input {
-		parts := strings.SplitN(line, ": ", 2)
-		if len(parts) < 2 {
+	for _, deviceName := range deviceNames {
+		deviceName = strings.TrimSpace(deviceName)
+		if deviceName == "" {
 			continue
 		}
-		category, value := parts[0], parts[1]
 
-		switch category {
+		deviceType := classifyDevice(deviceName)
+		var component Component
+
+		switch deviceType {
 		case "Processor":
-			jsonData = append(jsonData, Component{
-				Name:           value,
+			component = Component{
+				Name:           deviceName,
 				OptionType:     "Integrated",
 				IsSupplemental: false,
 				Features: []Feature{
@@ -217,103 +77,209 @@ func main() {
 					{Name: "FV_MEMORY", Features: []Feature{{ID: 326, Name: "Virtual Machine (Host)", IsPublishable: true}}},
 					{Name: "MEMORY", Features: []Feature{{ID: 80, Name: "System Memory", IsPublishable: true}}},
 					{Name: "CPUSCALING", Features: []Feature{{ID: 116, Name: "System Controlled Scaling", IsPublishable: true}}},
-					{Name: "profiler_hardware_core", Features: []Feature{{ID: 2867, Name: "CPU Core Performance  Counters", IsPublishable: true}}},
+					{Name: "profiler_hardware_core", Features: []Feature{{ID: 2867, Name: "CPU Core Performance Counters", IsPublishable: true}}},
 					{Name: "profiler_hardware_uncore", Features: []Feature{{ID: 2877, Name: "Uncore Performance Counters", IsPublishable: true}}},
-
 					{Name: "FV_CPU_PINNING", Features: []Feature{{ID: 2406, Name: "CPU Pinning", IsPublishable: true}}},
-
 					{Name: "FV_PCIE_STORAGE_PASSTHROUGH", Features: []Feature{{ID: 2576, Name: "PCIE Pass-Through Storage", IsPublishable: false}}},
 					{Name: "FV_PCIE_NETWORK_PASSTHROUGH", Features: []Feature{{ID: 2586, Name: "PCIE Pass-Through Network", IsPublishable: false}}},
-
 					{Name: "FV_USB_STORAGE_PASSTHROUGH", Features: []Feature{{ID: 2596, Name: "USB Pass-Through Storage", IsPublishable: false}}},
 					{Name: "FV_USB_NETWORK_PASSTHROUGH", Features: []Feature{{ID: 2606, Name: "USB Pass-Through Network", IsPublishable: false}}},
-
 					{Name: "FV_LIVE_MIGRATION", Features: []Feature{{ID: 2616, Name: "FV Live Migration", IsPublishable: false}}},
 				},
-			})
-		case "Video":
-			jsonData = append(jsonData, Component{
-				Name:           value,
-				OptionType:     "Integrated",
-				IsSupplemental: false,
-				Features: []Feature{
-					{Name: "VIDEO", Features: []Feature{{ID: 406, Name: "Graphic Console", IsPublishable: true}}},
-					{Name: "VIDEO_DRM", Features: []Feature{{ID: 2836, Name: "Basic GPU Graphics", IsPublishable: true}}},
-				},
-			})
-
+			}
 		case "Ethernet":
-			ethernetSpeeds := map[string]Feature{
-				"1GbE":   {ID: 606, Name: "1 Gigabit Ethernet", IsPublishable: true},
-				"2.5GbE": {ID: 616, Name: "2.5 Gigabit Ethernet", IsPublishable: true},
-				"10GbE":  {ID: 636, Name: "10 Gigabit Ethernet", IsPublishable: true},
-				"25GbE":  {ID: 656, Name: "25 Gigabit Ethernet", IsPublishable: true},
-				"40GbE":  {ID: 666, Name: "40 Gigabit Ethernet", IsPublishable: true},
-				"50GbE":  {ID: 676, Name: "50 Gigabit Ethernet", IsPublishable: true},
-				"100GbE": {ID: 686, Name: "100 Gigabit Ethernet", IsPublishable: true},
-				"200GbE": {ID: 2306, Name: "200 Gigabit Ethernet", IsPublishable: true},
-				"400GbE": {ID: 3057, Name: "400 Gigabit Ethernet", IsPublishable: true},
+			speeds := []struct {
+				Keywords  []string
+				Feature   Feature
+				SpeedName string
+			}{
+				{[]string{"1gbe", "1gb", "1 gigabit", "1gbe", "1gbit", "1gbe"}, Feature{ID: 606, Name: "1 Gigabit Ethernet", IsPublishable: true}, "1GigEthernet"},
+				{[]string{"2.5gbe", "2.5gb", "2.5 gigabit", "2.5gbe", "2.5gbit"}, Feature{ID: 616, Name: "2.5 Gigabit Ethernet", IsPublishable: true}, "2.5GigEthernet"},
+				{[]string{"10gbe", "10gb", "10gbase-t", "10 gigabit", "10gbe", "10gbit"}, Feature{ID: 636, Name: "10 Gigabit Ethernet", IsPublishable: true}, "10GigEthernet"},
+				{[]string{"25gbe", "25gb", "25 gigabit", "25gbe", "25gbit"}, Feature{ID: 656, Name: "25 Gigabit Ethernet", IsPublishable: true}, "25GigEthernet"},
+				{[]string{"40gbe", "40gb", "40 gigabit", "40gbe", "40gbit"}, Feature{ID: 666, Name: "40 Gigabit Ethernet", IsPublishable: true}, "40GigEthernet"},
+				{[]string{"50gbe", "50gb", "50 gigabit", "50gbe", "50gbit"}, Feature{ID: 676, Name: "50 Gigabit Ethernet", IsPublishable: true}, "50GigEthernet"},
+				{[]string{"100gbe", "100gb", "100 gigabit", "100gbe", "100gbit"}, Feature{ID: 686, Name: "100 Gigabit Ethernet", IsPublishable: true}, "100GigEthernet"},
+				{[]string{"200gbe", "200gb", "200 gigabit", "200gbe", "200gbit"}, Feature{ID: 2306, Name: "200 Gigabit Ethernet", IsPublishable: true}, "200GigEthernet"},
+				{[]string{"400gbe", "400gb", "400 gigabit", "400gbe", "400gbit"}, Feature{ID: 3057, Name: "400 Gigabit Ethernet", IsPublishable: true}, "400GigEthernet"},
 			}
 
+			lower := strings.ToLower(deviceName)
 			var selectedFeature Feature
 			var speedName string
 
-			for speed, feature := range ethernetSpeeds {
-				if strings.Contains(value, speed) {
-					selectedFeature = feature
-					speedName = strings.Replace(speed, "GbE", "GigEthernet", 1) // Converts "1GbE" -> "1GigEthernet"
+			for _, s := range speeds {
+				for _, kw := range s.Keywords {
+					if strings.Contains(lower, kw) {
+						selectedFeature = s.Feature
+						speedName = s.SpeedName
+						break
+					}
+				}
+				if selectedFeature.Name != "" {
 					break
 				}
 			}
 
-			if selectedFeature.Name != "" {
-				jsonData = append(jsonData, Component{
-					Name:           value,
+			// Special handling for ConnectX-6/7 and 200GbE
+			if (strings.Contains(lower, "connectx-6") || strings.Contains(lower, "connectx-7")) &&
+				(strings.Contains(lower, "200gbe") || strings.Contains(lower, "200gb") || strings.Contains(lower, "200 gigabit")) {
+				component = Component{
+					Name:           deviceName,
 					OptionType:     "Optional",
 					Type:           "Network",
 					IsSupplemental: false,
 					Features: []Feature{
+						{
+							Name: "200GigEthernet",
+							Features: []Feature{
+								{ID: 2306, Name: "200 Gigabit Ethernet", IsPublishable: true},
+							},
+						},
+						{
+							Name: "200GigRoCE",
+							Features: []Feature{
+								{ID: 2336, Name: "200 Gigabit RoCE", IsPublishable: true},
+							},
+						},
+						{
+							Name: "Infiniband_HDR",
+							Features: []Feature{
+								{ID: 2316, Name: "HDR Infiniband", IsPublishable: true},
+							},
+						},
+					},
+				}
+			} else if (strings.Contains(lower, "connectx-6") || strings.Contains(lower, "connectx-7")) &&
+				(strings.Contains(lower, "100gbe") || strings.Contains(lower, "100gb") || strings.Contains(lower, "100 gigabit")) {
+				component = Component{
+					Name:           deviceName,
+					OptionType:     "Optional",
+					Type:           "Network",
+					IsSupplemental: false,
+					Features: []Feature{
+						{
+							Name: "100GigEthernet",
+							Features: []Feature{
+								{ID: 686, Name: "100 Gigabit Ethernet", IsPublishable: true},
+							},
+						},
+						{
+							Name: "100GigRoCE",
+							Features: []Feature{
+								{ID: 936, Name: "100 Gigabit RoCE", IsPublishable: true},
+							},
+						},
+						{
+							Name: "Infiniband_HDR",
+							Features: []Feature{
+								{ID: 2316, Name: "HDR Infiniband", IsPublishable: true},
+							},
+						},
+					},
+				}
+			} else {
+				if selectedFeature.Name == "" {
+					// fallback generic Ethernet
+					selectedFeature = Feature{ID: 606, Name: "Ethernet", IsPublishable: true}
+					speedName = "Ethernet"
+				}
+				component = Component{
+					Name:           deviceName,
+					OptionType:     "Integrated",
+					Type:           "Network",
+					IsSupplemental: true,
+					Features: []Feature{
 						{Name: speedName, Features: []Feature{selectedFeature}},
 					},
-				})
+				}
 			}
 
-		case "USB":
-			jsonData = append(jsonData, Component{
-				Name:           value,
-				OptionType:     "Integrated",
-				IsSupplemental: false,
-				Features: []Feature{
-					{Name: "USB3_5Gbps", Features: []Feature{
-						{ID: 376, Name: "USB C (5 Gigabit) Ports", IsPublishable: true},
-						{ID: 2476, Name: "USB 3 (5 Gigabit) Ports", IsPublishable: true},
-					}},
-				},
-			})
-
 		case "Storage":
-			jsonData = append(jsonData, Component{
-				Name:           value,
-				OptionType:     "Integrated",
+			lower := strings.ToLower(deviceName)
+			switch {
+			case strings.Contains(lower, "sas"):
+				component = Component{
+					Name:           deviceName,
+					OptionType:     "Integrated",
+					IsSupplemental: false,
+					Features:       []Feature{{Name: "STORAGE", Features: []Feature{{ID: 1036, Name: "SAS", IsPublishable: true}}}},
+				}
+			case strings.Contains(lower, "sata"):
+				component = Component{
+					Name:           deviceName,
+					OptionType:     "Integrated",
+					IsSupplemental: false,
+					Features:       []Feature{{Name: "STORAGE", Features: []Feature{{ID: 1016, Name: "SATA", IsPublishable: true}}}},
+				}
+			case strings.Contains(lower, "m.2") && strings.Contains(lower, "sata"):
+				component = Component{
+					Name:           deviceName,
+					OptionType:     "Optional",
+					IsSupplemental: false,
+					Features:       []Feature{{Name: "M2_SATA", Features: []Feature{{ID: 996, Name: "M.2 SATA", IsPublishable: true}}}},
+				}
+			case strings.Contains(lower, "m.2") && strings.Contains(lower, "nvme"):
+				component = Component{
+					Name:           deviceName,
+					OptionType:     "Optional",
+					IsSupplemental: false,
+					Features:       []Feature{{Name: "M2_NVMe", Features: []Feature{{ID: 1057, Name: "M.2 NVMe", IsPublishable: true}}}},
+				}
+			case strings.Contains(lower, "u.2") && strings.Contains(lower, "nvme"):
+				component = Component{
+					Name:           deviceName,
+					OptionType:     "Optional",
+					IsSupplemental: false,
+					Features:       []Feature{{Name: "STORAGE", Features: []Feature{{ID: 1056, Name: "U.2 NVMe", IsPublishable: true}}}},
+				}
+			case strings.Contains(lower, "raid"):
+				component = Component{
+					Name:           deviceName,
+					OptionType:     "Optional",
+					IsSupplemental: false,
+					Features: []Feature{{Name: "STORAGE", Features: []Feature{
+						{ID: 1036, Name: "SAS", IsPublishable: true},
+						{ID: 1076, Name: "Hardware Raid", IsPublishable: true},
+						{ID: 2556, Name: "Flash Backed Cache", IsPublishable: true},
+					}}},
+				}
+			case strings.Contains(lower, "32gb"):
+				component = Component{
+					Name:           deviceName,
+					OptionType:     "Optional",
+					IsSupplemental: false,
+					Features:       []Feature{{Name: "STORAGE", Features: []Feature{{ID: 756, Name: "32 Gigabit Fibre Channel", IsPublishable: true}}}},
+				}
+			case strings.Contains(lower, "16gb"):
+				component = Component{
+					Name:           deviceName,
+					OptionType:     "Optional",
+					IsSupplemental: false,
+					Features:       []Feature{{Name: "STORAGE", Features: []Feature{{ID: 746, Name: "16 Gigabit Fibre Channel", IsPublishable: true}}}},
+				}
+			}
+		case "dvd":
+			component = Component{
+				Name:           deviceName,
+				OptionType:     "Optional",
 				IsSupplemental: false,
-				Features: []Feature{
-					{Name: "STORAGE", Features: []Feature{{ID: 986, Name: "M.2 NVMe", IsPublishable: true}}},
-					{Name: "STORAGE", Features: []Feature{{ID: 1056, Name: "U.2 NVMe", IsPublishable: true}}},
-					{Name: "STORAGE", Features: []Feature{{ID: 1006, Name: "PCIE NVMe", IsPublishable: true}}},
-				},
-			})
+				Features:       []Feature{{Name: "DVD", Features: []Feature{{ID: 1216, Name: "DVD-RW", IsPublishable: true}}}},
+			}
+		}
+
+		if component.Name != "" {
+			components = append(components, component)
 		}
 	}
 
-	result, _ := json.MarshalIndent(jsonData, "", "  ")
-	file, err := os.Create("output.json")
+	result, err := json.MarshalIndent(components, "", "  ")
 	if err != nil {
-		fmt.Println("Error creating file:", err)
+		fmt.Println("Error marshalling JSON:", err)
 		return
 	}
-	defer file.Close()
 
-	_, err = file.Write(result)
+	err = os.WriteFile("output.json", result, 0644)
 	if err != nil {
 		fmt.Println("Error writing to file:", err)
 	}
